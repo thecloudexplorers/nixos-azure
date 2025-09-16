@@ -3,10 +3,7 @@
 {
   # Use the import to add even more split modules into the config
   imports = [ ];
-  networking = { hostname = "nixos-azure-base-x"; };
-  # The only real addition to the base image we're doing here
-  # is the use so we can log into the machine. In more advanced
-  # configurations this is where you'd add specific options
+  networking = { hostname = "nixos-azure-developer-x"; };
   users = {
     users = {
       "initialuser" = {
