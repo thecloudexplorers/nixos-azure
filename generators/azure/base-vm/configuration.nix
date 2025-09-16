@@ -3,7 +3,10 @@
 {
   # Use the import to add even more split modules into the config
   imports = [ ];
-  networking = { hostname = "nixos-azure-base-x"; };
+  # set disk size to to 32G | As per Standard SSD E4
+  virtualisation = { diskSize = 32 * 1024; };
+  # Set a generic started networking hostname.
+  networking = { hostName = "nixos-azure-base-x"; };
   # The only real addition to the base image we're doing here
   # is the use so we can log into the machine. In more advanced
   # configurations this is where you'd add specific options

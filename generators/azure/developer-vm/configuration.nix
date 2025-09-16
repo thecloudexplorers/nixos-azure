@@ -3,7 +3,10 @@
 {
   # Use the import to add even more split modules into the config
   imports = [ ];
-  networking = { hostname = "nixos-azure-developer-x"; };
+  # set disk size to to 128G | As per Standard SSD E10
+  virtualisation = { diskSize = 128 * 1024; };
+  # Set a generic started networking hostname.
+  networking = { hostName = "nixos-azure-developer-x"; };
   users = {
     users = {
       "initialuser" = {

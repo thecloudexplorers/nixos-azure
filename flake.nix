@@ -23,17 +23,12 @@
     packages.x86_64-linux = {
       azureBaseVm = nixos-generators.nixosGenerate {
         system = "x86_64-linux";
+        specialArgs = { inherit (self) inputs outputs; };
         modules = [
-          # You can put all the nix configuration variables directly
-          # into the flake, as demonstrated here for the disk size.
-          # However, it is recommended to break apart the configuration
-          # into separate modules for maintainability.
           {
             # Pin nixpkgs to the flake input, so that the packages installed
             # come from the flake inputs.nixpkgs.url
-            nix.registry.nixpkgs.flake = nixpkgs;
-            # set disk size to to 32G | As per Standard SSD E4
-            virtualisation.diskSize = 32 * 1024;
+            nix = { registry = { nixpkgs = { flake = nixpkgs; }; }; };
           }
           # Import external repo modules like so:
           nixos-common.nixosModules.localization-en_nl
@@ -44,17 +39,12 @@
       };
       azureDevVm = nixos-generators.nixosGenerate {
         system = "x86_64-linux";
+        specialArgs = { inherit (self) inputs outputs; };
         modules = [
-          # You can put all the nix configuration variables directly
-          # into the flake, as demonstrated here for the disk size.
-          # However, it is recommended to break apart the configuration
-          # into separate modules for maintainability.
           {
             # Pin nixpkgs to the flake input, so that the packages installed
             # come from the flake inputs.nixpkgs.url
-            nix.registry.nixpkgs.flake = nixpkgs;
-            # set disk size to to 32G | As per Standard SSD E4
-            virtualisation.diskSize = 128 * 1024;
+            nix = { registry = { nixpkgs = { flake = nixpkgs; }; }; };
           }
           # Import external repo modules like so:
           nixos-common.nixosModules.localization-en_nl
