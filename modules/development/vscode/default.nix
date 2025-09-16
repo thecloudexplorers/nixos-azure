@@ -4,9 +4,8 @@
   programs = {
     vscode = {
       enable = true;
-      # Prefer vscode packaged by MSFT? Use pkgs.vscode
-      # Using vscodium here as open source element of the sovereign workplace
-      package = pkgs.vscodium;
+      # Prefer vscodium? Use pkgs.vscodium
+      package = pkgs.vscode;
       extensions = with pkgs.vscode-extensions; [
         # Most extensions should work except packs and should all be downcased
         jnoortheen.nix-ide
