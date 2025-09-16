@@ -2,7 +2,7 @@
 
 {
   # Use the import to add even more split modules into the config
-  imports = [ ../../../modules/desktop ../../../modules/development ];
+  imports = [ ../../../modules/desktop ../../../modules/development ../../../modules/system ];
   # set disk size to to 128G | As per Standard SSD E10
   # Note! When generating VHD files, it gets allocated to memory before
   # dumping into a file. If you have 32GB of RAM (incl. possible swap),
