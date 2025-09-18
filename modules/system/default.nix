@@ -10,8 +10,11 @@
       nmap
       openssl
       # Package for secrets management
+      git-credential-manager
       keepassxc
       # Add the following Microsoft packages
+      azure-cli
+      bicep
       microsoft-edge
       microsoft-identity-broker
       powershell
