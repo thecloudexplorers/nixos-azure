@@ -6,8 +6,6 @@
     systemPackages = with pkgs; [
       # Basic IT Ops tooling
       dig
-      kdePackages.krdc
-      kdePackages.partitionmanager
       netcat
       nmap
       openssl
@@ -24,19 +22,6 @@
       nixos-generators
       nixos-option
     ];
-    plasma6 = {
-      # Keep the environment light. No need
-      # to add these packages to a developer
-      # image (at this time).
-      excludePackages = with pkgs; [
-        kdePackages.elisa
-        kdePackages.gwenview
-        kdePackages.kate
-        kdePackages.khelpcenter
-        kdePackages.okular
-        kdePackages.spectacle
-      ];
-    };
   };
   nixpkgs = {
     config = {
@@ -53,6 +38,18 @@
       # More information here:
       # https://github.com/beekeeper-studio/beekeeper-studio/issues/2968
       permittedInsecurePackages = [ "beekeeper-studio-5.3.4" ];
+    };
+  };
+  services = {
+    openssh = {
+      enable = true;
+      ports = [ 22 22022 ];
+      openFirewall = true;
+    };
+  };
+  programs = {
+    ssh = {
+      startAgent = true;
     };
   };
 }

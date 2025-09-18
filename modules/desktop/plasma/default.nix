@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 
 {
   services = {
@@ -28,6 +28,26 @@
       openFirewall = true;
       defaultWindowManager = "startplasma-wayland";
       audio = { enable = true; };
+    };
+  };
+  environment = {
+    systemPackages = with pkgs; [
+      # Basic IT Ops tooling
+      kdePackages.krdc
+      kdePackages.partitionmanager
+    ];
+    plasma6 = {
+      # Keep the environment light. No need
+      # to add these packages to a developer
+      # image (at this time).
+      excludePackages = with pkgs; [
+        kdePackages.elisa
+        kdePackages.gwenview
+        kdePackages.kate
+        kdePackages.khelpcenter
+        kdePackages.okular
+        kdePackages.spectacle
+      ];
     };
   };
 }
