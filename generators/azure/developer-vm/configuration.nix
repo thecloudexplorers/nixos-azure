@@ -22,4 +22,10 @@
     hostName = "nixos-azure-developer-x";
   };
   system = { stateVersion = "25.05"; };
+  virtualisation = {
+    azureImage = {
+      bootSize = 512;
+      vmGeneration = "v1";
+    };
+  };
 }
