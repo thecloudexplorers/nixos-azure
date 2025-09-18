@@ -46,10 +46,23 @@
       ports = [ 22 22022 ];
       openFirewall = true;
     };
-  };
-  programs = {
-    ssh = {
-      startAgent = true;
+    waagent = {
+      # Explicitly enabling WAA & cloud-init
+      # as also done in the azure-common module.
+      enable = true;
+    };
+    cloud-init = {
+      # Allow cloud-init to manage the VM
+      # as cloud-init is being favored over
+      # the Windos Azure Agent at this time.
+      enable = true;
+      # Filesystem settings
+      btrfs = { enable = true; };
+      ext4 = { enable = true; };
+      xfs = { enable = true; };
+      # Networking related settings
+      network = { enable = true; };
     };
   };
+  programs = { ssh = { startAgent = true; }; };
 }
