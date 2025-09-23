@@ -10,23 +10,28 @@
       sddm = {
         enable = true;
         autoNumlock = true;
-        wayland = {
-          enable = true;
-          # Compositor options: kwin, weston
-          compositor = "weston";
-        };
+        # Explicitly disable Wayland as it caused issues
+        wayland = { enable = false; };
       };
     };
-    # Explicitly *disable* xserver, so you don't
-    # get Plasma/Wayland && Plasma/X11.
-    xserver = { enable = false; };
+    # Utilize Plasma/X11 as desktop environment,
+    # instead of Wayland. Wayland can cause some
+    # RDP issues.
+    xserver = {
+      enable = true;
+      xautolock = {
+        enable = true;
+        killtime = 10;
+      };
+    };
     # Configure Remote Desktop Protocol,
-    # using Plasma/Wayland.
+    # using Plasma/X11.
     xrdp = {
       enable = lib.mkForce true;
       port = 3389;
-      openFirewall = true;
-      defaultWindowManager = "startplasma-wayland";
+      openFirewall = lib.mkDefault true;
+      # Explicitly ensure xRDP start Plasma/X11
+      defaultWindowManager = "startplasma-x11";
       audio = { enable = true; };
     };
   };
