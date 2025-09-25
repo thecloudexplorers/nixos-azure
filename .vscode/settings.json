@@ -1,0 +1,13 @@
+{
+	"git.autofetch": true,
+	"git.autofetchPeriod": 300,
+	"git.branchProtection": [
+		"main"
+	],
+	"git.defaultBranchName": "main",
+	"git.enableCommitSigning": true,
+	"git.enabled": true,
+	"git.enableSmartCommit": false,
+	"git.promptToSaveFilesBeforeCommit": "always",
+	"git.pruneOnFetch": true
+}
