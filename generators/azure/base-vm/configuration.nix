@@ -8,7 +8,7 @@
   # Set a generic started networking hostname.
   networking = { hostName = "nixos-azure-base-x"; };
   # The only real addition to the base image we're doing here
-  # is the use so we can log into the machine. In more advanced
+  # is the user so we can log into the machine. In more advanced
   # configurations this is where you'd add specific options
   users = {
     users = {
