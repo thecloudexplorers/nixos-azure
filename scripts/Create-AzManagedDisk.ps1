@@ -36,9 +36,9 @@ param(
 	# ===== Disk/VHD inputs =====
 	[Parameter(Mandatory)][ValidateScript({ Test-Path $_ })][string]$VhdPath,
 	[Parameter(Mandatory)][ValidatePattern('^[a-zA-Z0-9-_\.]{1,80}$')][string]$ManagedDiskName,
-	[Parameter()][ValidateSet('Windows','Linux')][string]$OsType = 'Linux',
-	[Parameter()][ValidateSet('Standard_LRS','Premium_LRS','StandardSSD_LRS','Premium_ZRS','StandardSSD_ZRS','UltraSSD_LRS')][string]$DiskSku = 'Standard_LRS',
-	[Parameter()][ValidateSet('V1','V2')][string]$HyperVGeneration = 'V1',
+	[Parameter()][ValidateSet('Windows', 'Linux')][string]$OsType = 'Linux',
+	[Parameter()][ValidateSet('Standard_LRS', 'Premium_LRS', 'StandardSSD_LRS', 'Premium_ZRS', 'StandardSSD_ZRS', 'UltraSSD_LRS')][string]$DiskSku = 'Standard_LRS',
+	[Parameter()][ValidateSet('V1', 'V2')][string]$HyperVGeneration = 'V1',
 
 	# ===== Behavior toggles =====	
 	[switch]$AssignRole, # if provided, ensures Data Operator for Managed Disks
@@ -52,7 +52,7 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
 function Ensure-AzModules {
-	$mods = 'Az.Accounts','Az.Resources','Az.Compute'
+	$mods = 'Az.Accounts', 'Az.Resources', 'Az.Compute'
 	$azRollup = Get-Module -ListAvailable -Name Az | Sort-Object Version -Descending | Select-Object -First 1
 
 
@@ -75,7 +75,7 @@ function Ensure-AzModules {
 			Import-Module -Name Az -RequiredVersion $RequiredAzVersion -Force
 		} 
 		else {
-				throw ("Az version {0} is below required {1}. Re-run with -InstallMissingModules or update manually." -f $azRollup.Version, $RequiredAzVersion)
+			throw ("Az version {0} is below required {1}. Re-run with -InstallMissingModules or update manually." -f $azRollup.Version, $RequiredAzVersion)
 		}
 	}
 }
@@ -109,12 +109,12 @@ function Ensure-RoleAssignment {
 		Write-Info "Role assignment already present for '$SignInName' -> '$role' at scope $scope."
 		return
 	}
-	if ($PSCmdlet.ShouldProcess("$SignInName","Assign role '$role' at $scope")) {
+	if ($PSCmdlet.ShouldProcess("$SignInName", "Assign role '$role' at $scope")) {
 		Write-Host "Creating role assignment '$role' for '$SignInName' at $scope..."
 		$params = @{ 
-			SignInName = $SignInName
+			SignInName         = $SignInName
 			RoleDefinitionName = $role
-			Scope = $scope
+			Scope              = $scope
 		}
 		New-AzRoleAssignment @params | Out-Null
 	}
@@ -123,32 +123,33 @@ function Ensure-RoleAssignment {
 function Ensure-ResourceGroup {
 	$rg = Get-AzResourceGroup -Name $ResourceGroupName -ErrorAction SilentlyContinue
 	if (-not $rg) {
-		if ($PSCmdlet.ShouldProcess("ResourceGroup/$ResourceGroupName","Create in $Location")) {
+		if ($PSCmdlet.ShouldProcess("ResourceGroup/$ResourceGroupName", "Create in $Location")) {
 			Write-Host "Creating resource group '$ResourceGroupName' in $Location..."
 			New-AzResourceGroup -Name $ResourceGroupName -Location $Location | Out-Null
 		}
-	} else {
+	}
+ else {
 		Write-Host "Resource group '$ResourceGroupName' already exists."
 	}
 }
 
 function Start-UploadVhd {
 	if (-not (Test-Path -Path $VhdPath)) { throw "VHD path not found: $VhdPath" }
-	if ([IO.Path]::GetExtension($VhdPath) -ne '.vhd'){
+	if ([IO.Path]::GetExtension($VhdPath) -ne '.vhd') {
 		throw "Only fixed .vhd is supported by Add-AzVhd (not .vhdx). Provided: $VhdPath"
 	}
 
 	$addVhdParams = @{
-		ResourceGroupName 	= $ResourceGroupName
-		LocalFilePath 		= $VhdPath
-		Location 			= $Location
-		DiskName 			= $ManagedDiskName
-		DiskSku 			= $DiskSku
-		DiskHyperVGeneration= $HyperVGeneration
-		DiskOsType 			= $OsType		
+		ResourceGroupName    = $ResourceGroupName
+		LocalFilePath        = $VhdPath
+		Location             = $Location
+		DiskName             = $ManagedDiskName
+		DiskSku              = $DiskSku
+		DiskHyperVGeneration = $HyperVGeneration
+		DiskOsType           = $OsType		
 	}
 	
-	if ($PSCmdlet.ShouldProcess($ManagedDiskName)){
+	if ($PSCmdlet.ShouldProcess($ManagedDiskName)) {
 		Write-Host "Upload VHD and create Managed Disk '$ManagedDiskName' in RG '$ResourceGroupName' at $Location"	
 		Add-AzVhd @addVhdParams	
 		Write-Host 'Upload completed.'
