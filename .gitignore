@@ -1,6 +1,21 @@
+## Nix gitignore
+# https://github.com/github/gitignore/blob/main/Nix.gitignore
 # Ignore build outputs from performing a nix-build or `nix build` command
 result
 result-*
 
 # Ignore automatically generated direnv output
 .direnv
+
+## VSCode gitignore
+# https://github.com/github/gitignore/blob/main/Global/VisualStudioCode.gitignore
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+!*.code-workspace
+
+# Built Visual Studio Code Extensions
+*.vsix
