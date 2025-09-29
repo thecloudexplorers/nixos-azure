@@ -40,8 +40,7 @@ param(
 	[Parameter()][ValidateSet('Standard_LRS','Premium_LRS','StandardSSD_LRS','Premium_ZRS','StandardSSD_ZRS','UltraSSD_LRS')][string]$DiskSku = 'Standard_LRS',
 	[Parameter()][ValidateSet('V1','V2')][string]$HyperVGeneration = 'V1',
 
-	# ===== Behavior toggles =====
-	[switch]$Overwrite,
+	# ===== Behavior toggles =====	
 	[switch]$AssignRole, # if provided, ensures Data Operator for Managed Disks
 	[switch]$InstallMissingModules, # if provided, installs Az.* modules if missing
 
@@ -62,26 +61,23 @@ function Ensure-AzModules {
 			throw 'Az PowerShell rollup not found. Re-run with -InstallMissingModules or install Az.* modules.'
 		}
 		Write-Host 'Az rollup not found. Installing required Az.* modules for CurrentUser...'
-		foreach($m in $mods) {
-			if (-not (Get-Module -ListAvailable -Name $m)) {
-				Install-Module -Name $m -Scope CurrentUser -Force -ErrorAction Stop
-			}
+		
+		if (-not (Get-Module -ListAvailable -Name $m)) {
+			Install-Module -Name Az -Scope CurrentUser -Force -ErrorAction Stop
+			Import-Module -Name Az -RequiredVersion $RequiredAzVersion -Force
 		}
 	} 
 	elseif ($azRollup.Version -lt $RequiredAzVersion) {
 		Write-Host ("Az rollup version {0} < required {1}." -f $azRollup.Version, $RequiredAzVersion)
 		if ($InstallMissingModules) {
 			Write-Host 'Updating required Az.* modules for CurrentUser...'
-			foreach($m in $mods){
-				Install-Module -Name $m -Scope CurrentUser -Force -AllowClobber -ErrorAction Stop
-			}
+			Install-Module -Name Az -Scope CurrentUser -Force -AllowClobber -ErrorAction Stop
+			Import-Module -Name Az -RequiredVersion $RequiredAzVersion -Force
 		} 
 		else {
 				throw ("Az version {0} is below required {1}. Re-run with -InstallMissingModules or update manually." -f $azRollup.Version, $RequiredAzVersion)
 		}
 	}
-
-	foreach($m in $mods){ Import-Module $m -ErrorAction Stop }
 }
 
 function Ensure-Connected {
@@ -149,17 +145,13 @@ function Start-UploadVhd {
 		DiskName 			= $ManagedDiskName
 		DiskSku 			= $DiskSku
 		DiskHyperVGeneration= $HyperVGeneration
-		DiskOsType 			= $OsType
+		DiskOsType 			= $OsType		
 	}
 	
-	if ($PSCmdlet.ShouldProcess($ManagedDiskName, $msg)){
-		Write-Host "Upload VHD and create Managed Disk '$ManagedDiskName' in RG '$ResourceGroupName' at $Location"
-	if ($Overwrite) {
-		Add-AzVhd @addVhdParams -OverWrite
-	} else {
-		Add-AzVhd @addVhdParams
-	}
-		Write-Info 'Upload completed.'
+	if ($PSCmdlet.ShouldProcess($ManagedDiskName)){
+		Write-Host "Upload VHD and create Managed Disk '$ManagedDiskName' in RG '$ResourceGroupName' at $Location"	
+		Add-AzVhd @addVhdParams	
+		Write-Host 'Upload completed.'
 	}
 }
 
