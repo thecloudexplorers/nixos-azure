@@ -2,21 +2,21 @@
 # the repo. Unless a later match takes precedence,
 # @<global-owner> will be requested for
 # review when someone opens a pull request.
-*         @thecloudexplorers/sovereign-solutions
+*                @thecloudexplorers/sovereign-solutions
 
 # In this example, @thecloudexplorers/sovereign-solutions-reviewers
 # owns any files in the src/nix directory at the root of the repository
 # and any of its subdirectories.
-/src/nix/  @thecloudexplorers/sovereign-solutions-reviewers
+/src/nix/        @thecloudexplorers/tcs-nix-reviewers
 
 # Order is important; the last matching pattern takes the most
 # precedence. When someone opens a pull request that only
 # modifies PowerShell files, only this owner and not the global
 # owner(s) will be requested for a review.
-*.ps1      @devjevnl
+/src/powershell/  @thecloudexplorers/tce-powershell-reviewers
 
 # Order is important; the last matching pattern takes the most
 # precedence. When someone opens a pull request that only
 # modifies Azure Pipelines files, only this owner and not the
 # global owner(s) will be requested for a review.
-*.yml      @devjevnl
+*.yml            @thecloudexplorers/tcs-azure-pipelines-reviewers
